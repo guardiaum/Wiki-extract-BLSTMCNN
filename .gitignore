@@ -1,0 +1,22 @@
+### Python ###
+
+# Byte-compiled / optimized / DLL files
+
+__pycache__/
+*.py[cod]
+*$py.class
+
+# virtualenv
+.venv/
+venv/
+ENV/
+.idea/
+
+data/*
+!data/.gitkeep
+embeddings/*
+!embeddings/.gitkeep
+models/*
+!models/.gitkeep
+output/*
+!output/.gitkeep
