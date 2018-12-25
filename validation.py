@@ -31,9 +31,9 @@ def compute_precision(guessed_sentences, correct_sentences):
         guessed = guessed_sentences[sentenceIdx]
         correct = correct_sentences[sentenceIdx]
 
-        #print('\n')
-        #print('guessed: {}'.format(guessed))
-        #print('correct: {}'.format(correct))
+        # print('\n')
+        # print('guessed: {}'.format(guessed))
+        # print('correct: {}'.format(correct))
 
         assert(len(guessed) == len(correct))
 

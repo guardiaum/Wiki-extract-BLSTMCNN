@@ -13,9 +13,9 @@ from keras.utils import Progbar
     return format :
     [ ['EU', 'B-ORG'], ['rejects', 'O'], ['German', 'B-MISC'], ['call', 'O'], ['to', 'O'], ['boycott', 'O'], ['British', 'B-MISC'], ['lamb', 'O'], ['.', 'O'] ]
 '''
-def read_file(file):
-    data = pd.read_csv(file, names=['sentence', 'entity', 'value', 'label'], )
-    data['property'] = 'state'
+def read_file(class_):
+    data = pd.read_csv('./data/'+class_+'.csv', names=['sentence', 'entity', 'value', 'label'], )
+    data['property'] = class_
     data = data[data['label'] == 't']
     subset = data[['property', 'value', 'sentence', 'property']]
     return split_data_get_features(subset)

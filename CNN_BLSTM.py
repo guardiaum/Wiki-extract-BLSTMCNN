@@ -34,8 +34,9 @@ class CNN_BLSTM(object):
 
     def loadData(self, class_):
         """Load data and add character information"""
-        self.trainSentences, self.testSentences = read_file('./data/'+class_+'.csv')
+        self.trainSentences, self.testSentences = read_file(class_)
         self.devSentences = read_validation_file('./data/validation-sentences.csv', class_)
+        print(self.devSentences[1:3])
 
     def addCharInfo(self):
         # format: [['EU', ['E', 'U'], 'B-ORG\n'], ...]
