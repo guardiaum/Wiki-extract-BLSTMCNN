@@ -10,7 +10,7 @@ LEARNING_RATE = 0.0105    # paper 0.0105
 OPTIMIZER = Nadam()       # paper uses SGD(lr=self.learning_rate), Nadam() recommended
 
 
-classes = ['state']
+classes = ['state','area_land_sq_mi','density_sq_mi','pop','area_percentage','district','seat_wl','area_total_sq_mi','largest_city_wl','area_water_sq','named_for']
 
 for class_ in classes:
     print("CLASS: {}\n".format(class_))

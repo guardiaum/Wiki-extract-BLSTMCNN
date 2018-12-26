@@ -14,10 +14,11 @@ from keras.utils import Progbar
     [ ['EU', 'B-ORG'], ['rejects', 'O'], ['German', 'B-MISC'], ['call', 'O'], ['to', 'O'], ['boycott', 'O'], ['British', 'B-MISC'], ['lamb', 'O'], ['.', 'O'] ]
 '''
 def read_file(class_):
-    data = pd.read_csv('./data/'+class_+'.csv', names=['sentence', 'entity', 'value', 'label'], )
+    data = pd.read_csv('./data/'+class_+'.csv', names=['sentence', 'entity', 'value', 'label'], dtype=str)
     data['property'] = class_
     data = data[data['label'] == 't']
     subset = data[['property', 'value', 'sentence', 'property']]
+
     return split_data_get_features(subset)
 
 
@@ -27,7 +28,7 @@ def read_file(class_):
     [ ['EU', 'B-ORG'], ['rejects', 'O'], ['German', 'B-MISC'], ['call', 'O'], ['to', 'O'], ['boycott', 'O'], ['British', 'B-MISC'], ['lamb', 'O'], ['.', 'O'] ]
 '''
 def read_validation_file(file, class_):
-    data = pd.read_csv(file)
+    data = pd.read_csv(file, dtype=str)
     data = data[data['property'] == class_]
     subset = data[['property', 'value', 'sentence']]
 
@@ -43,12 +44,14 @@ def get_data_from_class(data, class_):
 
 
 def sentence2features(prop, value, sent):
-    prop_tk = word_tokenize(prop.replace("_", " "))
-    value_tk = word_tokenize(value)
-    tokens = word_tokenize(sent)
-    postags = pos_tag(tokens)
-    return [[token, 'PROP' if token in prop_tk else 'VALUE' if token in value_tk else 'O'] for token, tag in postags]
-
+    try:
+        prop_tk = word_tokenize(prop.replace("_", " ").lower())
+        value_tk = word_tokenize(value.lower())
+        tokens = word_tokenize(sent)
+        postags = pos_tag(tokens)
+        return [[token, 'PROP' if token.lower() in prop_tk else 'VALUE' if token.lower() in value_tk else 'O'] for token, tag in postags]
+    except TypeError:
+        print("error trying tokenize sentence")
 
 def split_data_get_features(subset):
 
@@ -65,7 +68,28 @@ def split_data_get_features(subset):
     train_features = [sentence2features(labels_train[index][0], values_train[index][0], row[0]) for index, row in enumerate(data_train)]
     test_features = [sentence2features(labels_test[index][0], values_test[index][0], row[0]) for index, row in enumerate(data_test)]
 
-    return train_features, test_features
+    train_result = []
+    for s in train_features:
+        keep = False
+        for tags in s:
+            if tags[1] == 'VALUE':
+                keep = True
+        if keep is True:
+            train_result.append(s)
+
+    print('train: {}'.format(len(train_result)))
+
+    test_result = []
+    for s in test_features:
+        keep = False
+        for tags in s:
+            if tags[1] == 'VALUE':
+                keep = True
+        if keep is True:
+            test_result.append(s)
+    print('test: {}'.format(len(test_result)))
+
+    return train_result, test_result
 
 
 ''' 
