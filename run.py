@@ -10,8 +10,10 @@ LEARNING_RATE = 0.0105    # paper 0.0105
 OPTIMIZER = Nadam()       # paper uses SGD(lr=self.learning_rate), Nadam() recommended
 
 
-classes = ['state','area_land_sq_mi','density_sq_mi','pop','area_percentage','district','seat_wl','area_total_sq_mi','largest_city_wl','area_water_sq','named_for']
+classes = ['state', 'area_land_sq_mi', 'density_sq_mi', 'pop', 'area_percentage', 'district', 'seat_wl', 'area_total_sq_mi', 'largest_city_wl', 'area_water_sq_mi', 'named_for']
+#classes = ['district']
 
+models = []
 for class_ in classes:
     print("CLASS: {}\n".format(class_))
     cnn_blstm = CNN_BLSTM(class_, EPOCHS, DROPOUT,
@@ -23,4 +25,7 @@ for class_ in classes:
     cnn_blstm.createBatches()
     cnn_blstm.buildModel()
     cnn_blstm.train()
+    models.append([class_, cnn_blstm])
     print("\n")
+
+print('ALL TRAINED MODELS: {}'.format(len(models)))

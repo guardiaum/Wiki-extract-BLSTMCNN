@@ -31,6 +31,15 @@ class CNN_BLSTM(object):
                                                        self.learning_rate,
                                                        self.optimizer.__class__.__name__
                                                        )
+        self.trainSentences, self.testSentences, self.devSentences = None
+        self.train_set, self.test_set, self.dev_set = None
+        self.train_batch, self.train_batch_len = None
+        self.test_batch, self.test_batch_len = None
+        self.dev_batch, self.dev_batch_len = None
+        self.f1_test_history = []
+        self.f1_dev_history = []
+        self.model = None
+
 
     def loadData(self, class_):
         """Load data and add character information"""
@@ -209,7 +218,7 @@ class CNN_BLSTM(object):
                 print("rec dev ", round(rec_dev, 4))
                 print("f1 dev ", round(f1_dev, 4), "\n")
 
-                print("Final F1 test score: ", f1_test)
+                print("Final F1 dev score: ", f1_dev)
 
             self.writeToFile()
 
@@ -230,16 +239,15 @@ class CNN_BLSTM(object):
             predLabels, correctLabels = self.tag_dataset(self.dev_batch, self.model)
             pre_dev, rec_dev, f1_dev = compute_f1(predLabels, correctLabels, self.idx2Label)
             self.f1_dev_history.append(f1_dev)
+
             print("\nprec dev ", round(pre_dev, 4))
             print("rec dev ", round(rec_dev, 4))
             print("f1 dev ", round(f1_dev, 4), "\n")
 
-            print("Final F1 test score: ", f1_test)
+            print("Final F1 dev score: ", f1_dev)
 
         self.model.set_weights(self.init_weights)  # clear model
         print("Model weights cleared.")
-
-
 
 
     def verify_model_exists(self):
@@ -251,7 +259,6 @@ class CNN_BLSTM(object):
             self.model = load_model(filename)
             return True
         return False
-
 
     def writeToFile(self):
         """Write output to file"""
